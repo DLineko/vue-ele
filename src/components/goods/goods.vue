@@ -3,7 +3,7 @@
     <div class="menu-wrapper">
       <ul>
         <li v-for="item in goods" class="menu-item">
-          <span class="text">
+          <span class="text body-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
           </span>
         </li>
@@ -54,6 +54,7 @@
      .menu-item
        display :table
        height:54px
+       padding:0 12px
        width:56px
        line-height:14px
        .icon
@@ -77,6 +78,9 @@
        .text
          display :table-cell
          font-size:12px
+         width:56px
+         body-1px(rgba(7,17,27,0.1))
+         vertical-align middle
     .foods-wrapper
      flex 1
 

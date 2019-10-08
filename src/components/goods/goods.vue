@@ -2,10 +2,9 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuWrapper" >
       <ul>
-        <li v-for="(item,index) in goods" class="menu-item"
+         <li v-for="(item,index) in goods" class="menu-item"
             :class="{'current':currentIndex=== index}"
-              @click="selectMenu(index,$event)"
-        >
+              @click="selectMenu(index,$event)">
           <span class="text body-1px">
             <span v-show="item.type>0" class="icon" :class="classMap[item.type]"></span>{{item.name}}
           </span>
@@ -32,19 +31,25 @@
                   <span class="now">￥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart></shopcart>
+    <shopcart :delivery-price="seller.deliveryPrice"
+              :min-price="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
   import shopcart from '../../components/shopcart/shopcart.vue'
+  import cartcontrol from '../../components/cartcontrol/cartcontrol.vue'
+
   const ERR_OK=0;
   export default {
     props:{
@@ -90,6 +95,7 @@
           click:true
         });
         this.foodsScroll = new BScroll(this.$refs.foodsWrapper, {
+          click:true,
           probeType:3
         });
         this.foodsScroll.on('scroll',(pos)=>{
@@ -111,13 +117,14 @@
           return;
         }
         let foodlist=this.$refs.foodsWrapper.getElementsByClassName('foodListHook')
-        console.log(foodlist)
+       // console.log(foodlist)
         let el=foodlist[index]
         this.foodsScroll.scrollToElement(el,300)
       }
     },
     components:{
-      shopcart
+      shopcart,
+      cartcontrol
     }
   }
 </script>
@@ -186,6 +193,7 @@
      .food-item
        display:flex
        margin:18px
+       position: relative
        padding-bottom 18px
        body-1px(rgba(7,17,27,0.1))
        &:last-child
@@ -222,6 +230,8 @@
          .old
            text-decoration line-through
            font-size:10px
-
-
+       .cartcontrol-wrapper
+          position:absolute
+          right:0
+          bottom 12px
 </style>

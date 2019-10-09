@@ -32,7 +32,7 @@
                   <span class="old" v-show="food.oldPrice">￥{{food.oldPrice}}</span>
                 </div>
                 <div class="cartcontrol-wrapper">
-                  <cartcontrol :food="food"></cartcontrol>
+                  <cartcontrol :food="food" v-on:cart-add="cartAdd"></cartcontrol>
                 </div>
               </div>
             </li>
@@ -41,7 +41,10 @@
       </ul>
     </div>
     <shopcart :delivery-price="seller.deliveryPrice"
-              :min-price="seller.minPrice"></shopcart>
+              :min-price="seller.minPrice"
+              ref="shopcart"
+              :select-foods="selectFoods"
+    ></shopcart>
   </div>
 </template>
 
@@ -74,6 +77,18 @@
           }
         }
         return 0;
+      },
+      selectFoods(){
+        let foods=[]
+        console.log(this.goods)
+        this.goods.forEach((good)=>{
+          good.foods.forEach((food)=>{
+            if(food.count){
+              foods.push(food)
+            }
+          })
+        })
+        return foods
       }
     },
     created(){
@@ -120,7 +135,13 @@
        // console.log(foodlist)
         let el=foodlist[index]
         this.foodsScroll.scrollToElement(el,300)
-      }
+      },
+      cartAdd(el){
+      // dom元素更新后执行， 因此此处能正确打印出更改之后的值；
+      this.$nextTick(() => {
+        this.$refs.shopcart.drop(el);　//调用shopcart组件的drop()函数
+      });
+    }
     },
     components:{
       shopcart,
